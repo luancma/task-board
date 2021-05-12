@@ -4,6 +4,14 @@
 Projeto criado com React para reproduzir o comportamento de um quadro kanban.
 
 
+## Como rodar: 
+
+    git clone https://github.com/luancma/task-board.git
+    cd task-board
+    yarn
+    yarn start
+
+
 ## Ferramentas utilizadas: 
 
  - React 
