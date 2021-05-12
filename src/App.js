@@ -1,12 +1,13 @@
-import './App.css';
-import { Board } from './components/Board';
+import { Box } from "grommet";
+import "./App.css";
+import { Board } from "./components/Board";
+import { TaskStorePrivder } from "./Context";
 
 function App() {
   return (
-    <div>
-      <header>Board App</header>     
-      <Board /> 
-    </div>
+    <TaskStorePrivder>
+      <Board />
+    </TaskStorePrivder>
   );
 }
 
