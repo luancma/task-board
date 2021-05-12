@@ -5,20 +5,30 @@ import { uuid } from "uuidv4";
 import { api } from "../../services/api";
 
 export function CreateLabel({ open, closeModal, cards, id, name }) {
-  const { tasks } = useContext(TaskContext);
-  const [value, setValue] = useState("");
+  const { tasks, handleSetTasks } = useContext(TaskContext);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+
   const createTask = () => {
     const clonedTasks = tasks.filter((task) => task.id === id)[0];
 
     clonedTasks.cards.splice(1, 0, {
       id: uuid(),
       status: id,
-      title: "Task Title",
-      description: `New task ${Math.random()}`,
+      title,
+      description,
     });
 
-    api.put(`/tasks/${id}`, clonedTasks).then(() => closeModal());
+    api.put(`/tasks/${id}`, clonedTasks).then(() => {
+      setTitle("");
+      setDescription("");
+      closeModal();
+    });
   };
+
+  const validateCreateButton = () =>
+    !title.trim().length || !description.trim().length;
 
   return (
     <>
@@ -35,16 +45,20 @@ export function CreateLabel({ open, closeModal, cards, id, name }) {
             >
               <TextInput
                 placeholder="Título"
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
               />
               <TextArea
-                placeholder="type here"
-                value={value}
-                onChange={(event) => setValue(event.target.value)}
+                placeholder="Descrição"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
               />
 
-              <Button label="Criar" onClick={createTask} />
+              <Button
+                disabled={validateCreateButton()}
+                label="Criar"
+                onClick={createTask}
+              />
             </Box>
           </Layer>
         </Box>

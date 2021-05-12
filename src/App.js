@@ -1,13 +1,16 @@
-import { Box } from "grommet";
+import { QueryClientProvider } from "react-query";
 import "./App.css";
 import { Board } from "./components/Board";
 import { TaskStorePrivder } from "./Context";
+import { queryClient } from "./services/queryClient";
 
 function App() {
   return (
-    <TaskStorePrivder>
-      <Board />
-    </TaskStorePrivder>
+    <QueryClientProvider client={queryClient}>
+      <TaskStorePrivder>
+        <Board />
+      </TaskStorePrivder>
+    </QueryClientProvider>
   );
 }
 

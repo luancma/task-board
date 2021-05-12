@@ -1,5 +1,5 @@
-import { Box } from "grommet";
-import { useContext, useEffect, useState } from "react";
+import { Box, Main } from "grommet";
+import { useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import { TaskContext } from "../Context";
 import { api } from "../services/api";
@@ -53,11 +53,13 @@ export function Board() {
 
   return (
     <DragDropContext onDragEnd={handleDrag}>
-      <Box gap="small" direction="row">
-        {tasks.map((row) => {
-          return <Col id={row.id} name={row.name} cards={row.cards} />;
-        })}
-      </Box>
+      <Main overflow="auto">
+        <Box gap="small" direction="row">
+          {tasks.map((row) => {
+            return <Col id={row.id} name={row.name} cards={row.cards} />;
+          })}
+        </Box>
+      </Main>
     </DragDropContext>
   );
 }

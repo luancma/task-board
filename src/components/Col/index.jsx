@@ -1,16 +1,36 @@
 import { Box, Button, Text } from "grommet";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { TaskContext } from "../../Context";
+import { api } from "../../services/api";
 import { Card } from "../Card";
 import { CreateLabel } from "../CreateLabel";
 import { SDroppable, StyledBox } from "./styles";
 
-export function Col({ id, name, cards }) {
+export function Col({ id, name }) {
+  const { tasks, setTasks } = useContext(TaskContext);
+
   const [open, setOpen] = useState(false);
 
   const handleOpenModal = () => setOpen(true);
 
   const handleCloseModal = () => setOpen(false);
+
+  const handleRemove = (index) => {
+    const { cards } = tasks.filter((task) => task.id === id)[0];
+    cards.splice(index, 1);
+    setTasks(tasks);
+    api.put(`/tasks/${id}`, {
+      id,
+      name,
+      cards,
+    });
+  };
+
+  const { cards } = tasks.filter((task) => task.id === id)[0];
+
+
+  console.log({cards})
 
   return (
     <>
@@ -47,7 +67,14 @@ export function Col({ id, name, cards }) {
               className="droppable-col"
             >
               {cards.map((task, index) => (
-                <Card id={task.id} index={index} colId={id} task={task} />
+                <Card
+                  key={index}
+                  handleRemove={handleRemove}
+                  id={task.id}
+                  index={index}
+                  colId={id}
+                  task={task}
+                />
               ))}
             </SDroppable>
           )}
