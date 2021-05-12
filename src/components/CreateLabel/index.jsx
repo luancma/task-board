@@ -1,4 +1,4 @@
-import { Box, Button, Layer, TextInput } from "grommet";
+import { Box, Button, Layer, TextArea, TextInput } from "grommet";
 import { useContext, useState } from "react";
 import { TaskContext } from "../../Context";
 import { uuid } from "uuidv4";
@@ -38,11 +38,12 @@ export function CreateLabel({ open, closeModal, cards, id, name }) {
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
               />
-              <TextInput
-                placeholder="Descrição"
+              <TextArea
+                placeholder="type here"
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
               />
+
               <Button label="Criar" onClick={createTask} />
             </Box>
           </Layer>
