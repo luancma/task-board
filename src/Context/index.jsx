@@ -1,5 +1,4 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { api } from "../services/api";
 
 export const TaskContext = createContext({});
@@ -8,11 +7,10 @@ export function TaskStorePrivder({ children }) {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    api.get("/tasks").then((response) => setTasks(response.data));
+    api.get("/tasks").then((response) => setTasks(response.data.tasks));
   }, []);
 
   const handleSetTasks = useCallback((taskList) => {
-    console.log(taskList);
     setTasks(taskList);
   }, []);
 

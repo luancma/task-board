@@ -1,17 +1,12 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ProjectPage } from "../pages/ProjectPage";
 
 export function Routers() {
   return (
     <Router>
       <Switch>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/topics">
-          <Topics />
-        </Route>
         <Route path="/">
-          <Home />
+          <ProjectPage />
         </Route>
       </Switch>
     </Router>

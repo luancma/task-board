@@ -1,11 +1,11 @@
 import "./App.css";
-import { Board } from "./components/Board";
 import { TaskStorePrivder } from "./Context";
+import { Routers } from "./router";
 
 function App() {
   return (
     <TaskStorePrivder>
-      <Board />
+      <Routers />
     </TaskStorePrivder>
   );
 }
