@@ -1,5 +1,4 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { api } from "../services/api";
 
 export const TaskContext = createContext({});
