@@ -11,14 +11,12 @@ export function TaskStorePrivder({ children }) {
   }, []);
 
   const handleSetTasks = useCallback((taskList) => {
-    console.log(taskList);
     setTasks(taskList);
   }, []);
 
   const handleRemoveCard = (index, colId) => {
    const clonedTasks = tasks.filter((task) => task.id === colId)[0];
     clonedTasks.cards.splice(index, 1);
-    console.log(tasks)
     api.put(`/tasks/${colId}`, clonedTasks);
     return setTasks(tasks); 
   };
