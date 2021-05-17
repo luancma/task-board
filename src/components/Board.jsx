@@ -1,11 +1,21 @@
 import { Box, Main } from "grommet";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useParams } from "react-router";
 import { TaskContext } from "../Context";
 import { api } from "../services/api";
 import { Col } from "./Col";
 export function Board() {
-  const { tasks } = useContext(TaskContext);
+  const { tasks, tasksByProject, resetTasks } = useContext(TaskContext);
+  let { id } = useParams();
+
+  useEffect(() => {
+    tasksByProject(id);
+
+    return () => {
+      return resetTasks()
+    }
+  }, [id]);
 
   const handleDrag = ({ destination, source }) => {
     if (!destination) {
@@ -47,13 +57,16 @@ export function Board() {
       (item) => item.id === source.droppableId
     )[0];
 
-    api.put(`/tasks/${source.droppableId}`, sourceToUpdate);
+    api.put(`/tasks/${source.droppableId}`, {
+      projectId: id,
+      sourceToUpdate
+    });
     api.put(`/tasks/${destination.droppableId}`, destinationToUpdate);
   };
 
   return (
     <DragDropContext onDragEnd={handleDrag}>
-      <Main overflow="auto">
+      <Main overflow="auto" style={{ height: "97vh" }}>
         <Box gap="small" direction="row">
           {tasks.map((row) => {
             return <Col id={row.id} name={row.name} cards={row.cards} />;

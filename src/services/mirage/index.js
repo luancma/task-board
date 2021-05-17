@@ -1,45 +1,98 @@
 import { createServer, Model, Factory } from "miragejs";
+import uuid from "uuidv4";
 
 export function makeServer() {
   const server = createServer({
     models: {
+      project: Model.extend(),
       task: Model.extend(),
     },
 
     seeds(server) {
-      server.create("task", {
-        id: "todo",
-        name: "Todo",
-        cards: [
+      server.create("project", {
+        id: uuid,
+        title: "Projeto 1",
+        description: "Primeiro projeto",
+        tasks: [
           {
-            id: "983956b6-e2b3-426b-8b0a-15b51a0dcd10",
-            status: "todo",
-            title: "Task",
-            description: "dasdasdasdasdasdasdas",
+            id: "todo",
+            name: "Todo",
+            cards: [
+              {
+                id: "983956b6-e2b3-426b-8b0a-15b51a0dcd10",
+                status: "todo",
+                title: "Task",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
+          },
+          {
+            id: "in_progress",
+            name: "In Progress",
+            cards: [
+              {
+                id: "983956b6-e2b3-426b-8b0a-15dqw51a0dc8b0",
+                status: "in_progress",
+                title: "Title",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
+          },
+          {
+            id: "done",
+            name: "Done",
+            cards: [
+              {
+                id: "983956b6-2f21-426b-8b0a-15b51a0dc8b0",
+                status: "Done",
+                title: "Title",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
           },
         ],
       });
-      server.create("task", {
-        id: "in_progress",
-        name: "In Progress",
-        cards: [
+
+      server.create("project", {
+        title: "Projeto 2",
+        id: uuid,
+        description: "Segundo Projeto",
+        tasks: [
           {
-            id: "983956b6-e2b3-426b-8b0a-15dqw51a0dc8b0",
-            status: "in_progress",
-            title: "Title",
-            description: "dasdasdasdasdasdasdas",
+            id: "todo",
+            name: "Todo",
+            cards: [
+              {
+                id: "983956b6-e2b3-426b-8b0a-15b51a0dcd10",
+                status: "todo",
+                title: "Task",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
           },
-        ],
-      });
-      server.create("task", {
-        id: "done",
-        name: "Done",
-        cards: [
           {
-            id: "983956b6-2f21-426b-8b0a-15b51a0dc8b0",
-            status: "Done",
-            title: "Title",
-            description: "dasdasdasdasdasdasdas",
+            id: "in_progress",
+            name: "In Progress",
+            cards: [
+              {
+                id: "983956b6-e2b3-426b-8b0a-15dqw51a0dc8b0",
+                status: "in_progress",
+                title: "Title",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
+          },
+          {
+            id: "done",
+            name: "Done",
+            cards: [
+              {
+                id: "983956b6-2f21-426b-8b0a-15b51a0dc8b0",
+                status: "Done",
+                title: "Title",
+                description: "dasdasdasdasdasdasdas",
+              },
+            ],
           },
         ],
       });
@@ -47,16 +100,29 @@ export function makeServer() {
 
     routes() {
       this.namespace = "api";
-      this.timing = 750;
 
-      this.get("/tasks");
+      this.get("/projects");
+
+      this.get("/tasks/:id", (schema, request) => {
+        const tasks = schema.projects.findBy({ id: request.params.id });
+        return tasks.attrs.tasks;
+      });
 
       this.put("/tasks/:id", (schema, request) => {
+        const requestBody = JSON.parse(request.requestBody)
+        const tasks = schema.projects.findBy({ id: requestBody.projectId });
+        const cards = JSON.parse(request.requestBody).cards;
+        // return tasks.update({
+        //   cards,
+        // });
+        console.log(requestBody.sourceToUpdate.cards[0].status)
+        console.log({tasks: tasks.attrs.tasks})
+      });
+
+      this.post("/tasks/:id", (schema, request) => {
         const tasks = schema.tasks.find(request.params.id);
-        const cards = JSON.parse(request.requestBody).cards
-        return tasks.update({
-          cards
-        });
+        const newTask = JSON.parse(request.requestBody);
+        console.log(newTask);
       });
     },
   });
