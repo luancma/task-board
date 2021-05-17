@@ -109,14 +109,26 @@ export function makeServer() {
       });
 
       this.put("/tasks/:id", (schema, request) => {
-        const requestBody = JSON.parse(request.requestBody)
-        const tasks = schema.projects.findBy({ id: requestBody.projectId });
-        const cards = JSON.parse(request.requestBody).cards;
-        // return tasks.update({
-        //   cards,
-        // });
-        console.log(requestBody.sourceToUpdate.cards[0].status)
-        console.log({tasks: tasks.attrs.tasks})
+        const requestBody = JSON.parse(request.requestBody);
+
+        const project = schema.projects.findBy({
+          id: requestBody.projectId,
+        }).attrs;
+
+        const tasksListToUpdate = project.tasks.map((taskList) => {
+          if (taskList.id === requestBody.newList.id) {
+            return requestBody.newList;
+          }
+          return taskList;
+        });
+
+        schema.projects
+          .findBy({
+            id: requestBody.projectId,
+          })
+          .update(requestBody.newList.id, {
+            tasks: tasksListToUpdate,
+          });
       });
 
       this.post("/tasks/:id", (schema, request) => {

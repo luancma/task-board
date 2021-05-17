@@ -13,8 +13,8 @@ export function Board() {
     tasksByProject(id);
 
     return () => {
-      return resetTasks()
-    }
+      return resetTasks();
+    };
   }, [id]);
 
   const handleDrag = ({ destination, source }) => {
@@ -59,9 +59,13 @@ export function Board() {
 
     api.put(`/tasks/${source.droppableId}`, {
       projectId: id,
-      sourceToUpdate
+      newList: sourceToUpdate,
     });
-    api.put(`/tasks/${destination.droppableId}`, destinationToUpdate);
+    
+    api.put(`/tasks/${destination.droppableId}`, {
+      projectId: id,
+      newList: destinationToUpdate
+    });
   };
 
   return (
