@@ -6,7 +6,7 @@ export const TaskContext = createContext({});
 export function TaskStorePrivder({ children }) {
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [activedProjectID, setActivedProjectID] = useState(0);
+  const [activedProject, setActivedProject] = useState(0);
 
   useEffect(() => {
     api
@@ -24,13 +24,13 @@ export function TaskStorePrivder({ children }) {
     api.put(`/tasks/${colId}`, clonedTasks);
     return setTasks(tasks);
   };
-
-  function createNewTask({ taskID, task }) {
-    // return createTaskService({  })
-  }
-
+  
   async function tasksByProject(projectID) {
-    setActivedProjectID(projectID);
+    setActivedProject({
+      ...activedProject,
+      id: projectID,
+      title: projects.filter(project => project.id === projectID)[0].title
+    });
     await api
       .get(`/tasks/${projectID}`)
       .then((response) => setTasks(response.data));
@@ -50,7 +50,8 @@ export function TaskStorePrivder({ children }) {
         setTasks,
         tasksByProject,
         resetTasks,
-        activedProjectID,
+        activedProject,
+        setProjects
       }}
     >
       {children}

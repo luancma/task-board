@@ -4,31 +4,41 @@ import { TaskContext } from "../../Context";
 import { uuid } from "uuidv4";
 import { api } from "../../services/api";
 
-export function CreateLabel({ open, closeModal, cards, id, name }) {
-  const { tasks, handleSetTasks, activedProject } = useContext(TaskContext);
+export function CreateProject({ open, closeModal, cards, id, name }) {
+  const { setProjects } = useContext(TaskContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  const createTask = () => {
-    const clonedTasks = tasks.filter((task) => task.id === id)[0];
-
-    clonedTasks.cards.splice(1, 0, {
-      id: uuid(),
-      status: id,
+  const createProject = () => {
+    const newProject = {
+      id: uuid,
       title,
       description,
-    });
+      tasks: [
+        {
+          id: "todo",
+          name: "Todo",
+          cards: [],
+        },
+        {
+          id: "in_progress",
+          name: "In Progress",
+          cards: [],
+        },
+        {
+          id: "done",
+          name: "Done",
+          cards: [],
+        },
+      ],
+    };
 
-    api
-      .put(`/tasks/${id}`, {
-        projectId: activedProject.id,
-        newList: clonedTasks,
-      })
-      .then(() => {
-        setTitle("");
-        setDescription("");
-        closeModal();
-      });
+    api.post(`/projects`, newProject).then((response) => {
+      setTitle("");
+      setDescription("");
+      setProjects(response.data.projects);
+      closeModal();
+    });
   };
 
   const validateCreateButton = () =>
@@ -55,7 +65,7 @@ export function CreateLabel({ open, closeModal, cards, id, name }) {
               margin="medium"
               pad="small"
             >
-              <Heading size="small">Nova Tarefa</Heading>
+              <Heading size="small">Novo Projeto</Heading>
               <TextInput
                 responsive
                 placeholder="Título"
@@ -73,13 +83,9 @@ export function CreateLabel({ open, closeModal, cards, id, name }) {
                 <Button
                   disabled={validateCreateButton()}
                   label="Criar"
-                  onClick={createTask}
+                  onClick={createProject}
                 />
-                <Button
-                  label="Cancelar"
-                  color="status-critical"
-                  onClick={closeModal}
-                />
+                <Button color="status-critical" label="Cancelar" onClick={closeModal} />
               </Box>
             </Box>
           </Layer>

@@ -11,7 +11,7 @@ export function ConfirmDelete({
   index,
   disableItem,
 }) {
-  const { tasks, setTasks, activedProjectID } = useContext(TaskContext);
+  const { tasks, setTasks, activedProject } = useContext(TaskContext);
 
   const handleRemoveCard = (index, colId) => {
     const clonedTasks = tasks.filter((task) => task.id === colId)[0];
@@ -20,7 +20,7 @@ export function ConfirmDelete({
 
     api
       .put(`/tasks/${colId}`, {
-        projectId: activedProjectID,
+        projectId: activedProject.id,
         newList: clonedTasks,
       })
       .then(() => {

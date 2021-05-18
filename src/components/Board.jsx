@@ -1,14 +1,15 @@
-import { Box, Main } from "grommet";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Box, Heading, Main } from "grommet";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router";
 import { TaskContext } from "../Context";
 import { api } from "../services/api";
 import { Col } from "./Col";
+import { CreateProject } from "./CreateProject";
 export function Board() {
-  const { tasks, tasksByProject, resetTasks } = useContext(TaskContext);
-  let { id } = useParams();
-
+  const { id } = useParams();
+  const { tasks, tasksByProject, resetTasks, activedProject } =
+    useContext(TaskContext);
   useEffect(() => {
     tasksByProject(id);
 
@@ -61,17 +62,20 @@ export function Board() {
       projectId: id,
       newList: sourceToUpdate,
     });
-    
+
     api.put(`/tasks/${destination.droppableId}`, {
       projectId: id,
-      newList: destinationToUpdate
+      newList: destinationToUpdate,
     });
   };
 
   return (
     <DragDropContext onDragEnd={handleDrag}>
       <Main overflow="auto" style={{ height: "97vh" }}>
-        <Box gap="small" direction="row">
+        <Box pad={{ horizontal: "medium" }}>
+          <Heading size="small">{activedProject.title}</Heading>
+        </Box>
+        <Box gap="small" direction="row" pad="medium">
           {tasks.map((row) => {
             return <Col id={row.id} name={row.name} cards={row.cards} />;
           })}
