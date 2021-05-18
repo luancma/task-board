@@ -1,5 +1,4 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { api } from "../services/api";
 
 export const TaskContext = createContext({});
@@ -7,12 +6,12 @@ export const TaskContext = createContext({});
 export function TaskStorePrivder({ children }) {
   const [projects, setProjects] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [activedProjectID, setActivedProjectID] = useState(0); 
+  const [activedProjectID, setActivedProjectID] = useState(0);
 
   useEffect(() => {
     api
       .get("/projects")
-      .then((response) => setProjects(response.data.projects))
+      .then((response) => setProjects(response.data.projects));
   }, []);
 
   const handleSetTasks = useCallback((taskList) => {
@@ -22,7 +21,6 @@ export function TaskStorePrivder({ children }) {
   const handleRemoveCard = (index, colId) => {
     const clonedTasks = tasks.filter((task) => task.id === colId)[0];
     clonedTasks.cards.splice(index, 1);
-    console.log(tasks);
     api.put(`/tasks/${colId}`, clonedTasks);
     return setTasks(tasks);
   };
@@ -32,8 +30,10 @@ export function TaskStorePrivder({ children }) {
   }
 
   async function tasksByProject(projectID) {
-    setActivedProjectID(projectID)
-    await api.get(`/tasks/${projectID}`).then(response => setTasks(response.data))
+    setActivedProjectID(projectID);
+    await api
+      .get(`/tasks/${projectID}`)
+      .then((response) => setTasks(response.data));
   }
 
   function resetTasks() {
@@ -50,7 +50,7 @@ export function TaskStorePrivder({ children }) {
         setTasks,
         tasksByProject,
         resetTasks,
-        activedProjectID
+        activedProjectID,
       }}
     >
       {children}
