@@ -103,6 +103,12 @@ export function makeServer() {
 
       this.get("/projects");
 
+      this.post("/projects", (schema, request) => {
+        const newProject = JSON.parse(request.requestBody);
+        schema.projects.create(newProject);
+        return schema.projects.all();
+      });
+
       this.get("/tasks/:id", (schema, request) => {
         const tasks = schema.projects.findBy({ id: request.params.id });
         return tasks.attrs.tasks;
