@@ -19,6 +19,7 @@ Projeto criado com React para reproduzir o comportamento de um quadro kanban.
  -  React-beautiful-dnd
  - Styled-Components
  - Grommet
+ - Mirage.js
 
 
 ## Features
