@@ -8,10 +8,10 @@ export function Card({ id, index, colId, task }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [removed, setRemoved] = useState(false);
 
-  const disable = () => setRemoved(true)
+  const disable = () => setRemoved(true);
 
-  if(removed){
-    return null
+  if (removed) {
+    return null;
   }
 
   return (

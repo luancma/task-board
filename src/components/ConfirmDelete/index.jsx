@@ -1,7 +1,6 @@
-import { Box, Button, Layer, Text, TextArea, TextInput } from "grommet";
-import { useContext, useState } from "react";
+import { Box, Button, Layer, Text } from "grommet";
+import { useContext } from "react";
 import { TaskContext } from "../../Context";
-import { uuid } from "uuidv4";
 import { api } from "../../services/api";
 
 export function ConfirmDelete({
@@ -12,41 +11,60 @@ export function ConfirmDelete({
   index,
   disableItem,
 }) {
-  const { tasks, setTasks } = useContext(TaskContext);
+  const { tasks, setTasks, activedProjectID } = useContext(TaskContext);
 
   const handleRemoveCard = (index, colId) => {
     const clonedTasks = tasks.filter((task) => task.id === colId)[0];
 
     clonedTasks.cards.splice(index, 1);
 
-    api.put(`/tasks/${colId}`, clonedTasks).then(() => {
-      setTasks(tasks);
-      closeModal();
-      disableItem();
-    });
+    api
+      .put(`/tasks/${colId}`, {
+        projectId: activedProjectID,
+        newList: clonedTasks,
+      })
+      .then(() => {
+        setTasks(tasks);
+        closeModal();
+        disableItem();
+      });
   };
+
   return (
     <>
       {!!open && (
         <Box style={{ position: "absolute" }}>
-          <Layer pad="medium" onEsc={closeModal} onClickOutside={closeModal}>
+          <Layer
+            pad="medium"
+            onEsc={closeModal}
+            onClickOutside={closeModal}
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
             <Box
-              width="small"
-              height="small"
               justify="center"
               align="center"
               margin="small"
               gap="medium"
+              width="medium"
+              height="medium"
+              pad="medium"
             >
               <Text>
                 Tem certeza que deseja remover a task <b>{task.title}</b>?
               </Text>
-              <Button
-                primary
-                color="status-critical"
-                label="Confirmar"
-                onClick={() => handleRemoveCard(index, colId)}
-              />
+
+              <Box direction="row" gap="medium">
+                <Button
+                  primary
+                  color="status-critical"
+                  label="Confirmar"
+                  onClick={() => handleRemoveCard(index, colId)}
+                />
+                <Button primary label="Cancelar" onClick={closeModal} />
+              </Box>
             </Box>
           </Layer>
         </Box>

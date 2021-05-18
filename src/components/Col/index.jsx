@@ -29,9 +29,6 @@ export function Col({ id, name }) {
 
   const { cards } = tasks.filter((task) => task.id === id)[0];
 
-
-  console.log({cards})
-
   return (
     <>
       <StyledBox
