@@ -28,7 +28,6 @@ Projeto criado com React para reproduzir o comportamento de um quadro kanban.
 - Soft Delete
 
 ## Pendências
-
+ - [X] Criação de novos projetos
  - [ ] Criação de novas colunas;
- - [ ] Criação de novos projetos
  - [ ] Atribuir tags para filtragem
