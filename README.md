@@ -1,10 +1,8 @@
 
 # Kanban Board
+Simple Kanban board created with React
 
-Projeto criado com React para reproduzir o comportamento de um quadro kanban.
-
-
-## Como rodar: 
+## How to run: 
 
     git clone https://github.com/luancma/task-board.git
     cd task-board
@@ -28,7 +26,9 @@ Projeto criado com React para reproduzir o comportamento de um quadro kanban.
 - Remoção de tasks
 - Soft Delete
 
-## Pendências
- - [X] Criação de novos projetos
- - [ ] Criação de novas colunas;
- - [ ] Atribuir tags para filtragem
+## Backlog
+ - [X] Can add new boards;
+ - [ ] Create a new column;
+ - [ ] Create tags to filter tasks;
+ - [ ] Convert project to typescript;
+ - [ ] Add tests;
